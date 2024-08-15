@@ -1,0 +1,55 @@
+version: '3.7'
+volumes:
+  db:
+services:
+  file-processing-api:
+    container_name: file-processing-api
+    image: file-processing-api:1.0.0
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
+    build:
+      context: .
+      target: development
+    command:
+      - sh
+      - -c
+      - |
+        npm install
+        npm run start:dev
+    networks:
+      - default
+    ports:
+      - 3000:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/file-processing-api/app
+      - ./package.json:/usr/file-processing-api/package.json
+      - ./package-lock.json:/usr/file-processing-api/package-lock.json
+    restart: unless-stopped
+    extra_hosts:
+      - 'file-processing-api.dev:172.17.0.1'
+  postgres:
+    container_name: postgres
+    image: postgres:11.14
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'docker'
+      POSTGRES_DB: 'file-processing-api'
+    # healthcheck:
+    #   test: ['CMD-SHELL', 'pg_isready -U postgres -d file-processing-api']
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 5
+    volumes:
+      - db:/var/lib/postgresql/data:z
+      - .docker/init.sh:/docker-entrypoint-initdb.d/init.sh:z
+networks:
+  default:
+    external:
+      name: dev-network
