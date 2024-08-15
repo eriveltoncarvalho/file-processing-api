@@ -1,7 +1,7 @@
 # API processamento de arquivos
 
 **Uma API desenvolvida utilizando Node.js e TypeScript, integrada com banco de dados PostgreSQL, para realizar o processamento eficiente de arquivos em larga escala. 
-Otimizada para alta performance, a API é capaz de processar mais de 1 milhão de registros em menos de um minuto, garantindo escalabilidade e confiabilidade.**
+Otimizada para alta performance, a API é capaz de processar mais de 100 mil registros em menos de um minuto, garantindo escalabilidade e confiabilidade.**
 
 
 **Configuração local**
